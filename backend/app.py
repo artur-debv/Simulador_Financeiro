@@ -14,13 +14,13 @@ init_db()
 app.register_blueprint(calcular_routes)
 
 # Obter taxas atuais
-# taxa_selic = obter_taxa_selic()
-# taxa_ipca = obter_ipca()
+taxa_selic = obter_taxa_selic()
+taxa_ipca = obter_ipca()
 
-@app.route('/')
-def home():
-    return 'Hello, World!'
+# @app.route('/')
+# def home():
+#     return 'Hello, World!'
 
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, host="0.0.0.0", port=5000)
 

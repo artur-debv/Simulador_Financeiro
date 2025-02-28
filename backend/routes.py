@@ -1,21 +1,22 @@
 from flask import Blueprint, request, jsonify
-from services import calcular_vpl, calcular_tir, calcular_payback
+from services import calcular_tir
 
-calcular_routes = Blueprint('calcular_routes', __name__)
+calcular_routes = Blueprint("calcular_routes", __name__)
 
 @calcular_routes.route('/calcular', methods=['POST'])
 def calcular():
-    data = request.json
-    investimento = data['investimento']
-    fluxos = data['fluxos']
+    try:
+        data = request.get_json()
+        if data is None:
+            return jsonify({"erro": "JSON inválido ou não enviado"}), 400
 
-    vpl = calcular_vpl(investimento, fluxos)
-    tir = calcular_tir(investimento, fluxos)
-    payback_simples, payback_desc = calcular_payback(investimento, fluxos)
+        investimento = data.get("investimento")
+        fluxos = data.get("fluxos", [])
 
-    return jsonify({
-        "vpl": vpl,
-        "tir": tir,
-        "payback_simples": payback_simples,
-        "payback_desc": payback_desc
-    })
+        if investimento is None or not isinstance(fluxos, list):
+            return jsonify({"erro": "Os campos 'investimento' e 'fluxos' são obrigatórios"}), 400
+
+        tir = calcular_tir(investimento, fluxos)
+        return jsonify({"tir": tir})
+    except Exception as e:
+        return jsonify({"erro": str(e)}), 500

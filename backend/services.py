@@ -1,15 +1,16 @@
 import numpy as np
+import numpy_financial as npf
 
 def calcular_vpl(investimento_inicial, fluxos_de_caixa, tma):
     """Calcula o Valor Presente Líquido (VPL)."""
     vpl = sum(fc / ((1 + tma) ** t) for t, fc in enumerate(fluxos_de_caixa, start=1))
     return vpl - investimento_inicial
 
-def calcular_tir(investimento_inicial, fluxos_de_caixa):
-    """Calcula a Taxa Interna de Retorno (TIR) usando numpy.irr()."""
-    fluxo_completo = [-investimento_inicial] + fluxos_de_caixa
-    tir = np.irr(fluxo_completo)
+def calcular_tir(investimento, fluxos):
+    fluxo_completo = [-investimento] + fluxos
+    tir = npf.irr(fluxo_completo)  # Corrigindo a chamada da função
     return tir
+
 
 def calcular_payback(investimento_inicial, fluxos_de_caixa, tma):
     """Calcula o Payback Simples e Descontado."""
