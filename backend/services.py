@@ -9,7 +9,7 @@ def calcular_vpl(investimento_inicial, fluxos_de_caixa, tma):
 def calcular_tir(investimento, fluxos):
     fluxo_completo = [-investimento] + fluxos
     tir = npf.irr(fluxo_completo)  # Corrigindo a chamada da função
-    return tir
+    return f"{round(tir * 100, 2)}%"
 
 
 def calcular_payback(investimento_inicial, fluxos_de_caixa, tma):
