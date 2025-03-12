@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* Exemplo de estilo global */
+body {
+  font-family: "Arial", sans-serif;
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Roboto", sans-serif;
+}
+
+/* Exemplo de estilo de fundo */
+.bg-indigo-600 {
+  background-color: #4c6ef5;
+}
+
+/* Outros estilos específicos podem ser definidos aqui */
