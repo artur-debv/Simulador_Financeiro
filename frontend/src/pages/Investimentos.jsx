@@ -1,10 +1,14 @@
 import React from "react";
+import fundo from "../assets/fundo.jpg";
 
 function Investimentos() {
   return (
     <div className="bg-gray-50 text-gray-800 font-sans min-h-screen">
       {/* Hero Section */}
-      <section className="relative h-screen bg-indigo-600 text-white flex items-center justify-center">
+      <section
+        className="relative h-screen bg-indigo-600 text-white flex items-center justify-center bg-cover bg-center "
+        style={{ backgroundImage: `url(${fundo})` }}
+      >
         <div className="absolute inset-0 bg-black opacity-50"></div>
         <div className="text-center z-10 px-6 py-8">
           <h1 className="text-5xl font-bold mb-4">

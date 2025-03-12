@@ -1,91 +1,85 @@
 import React, { useState } from "react";
+import axios from "axios";
 
 function Simulador() {
-  const [capitalInicial, setCapitalInicial] = useState("");
-  const [taxaJuros, setTaxaJuros] = useState("");
-  const [anos, setAnos] = useState("");
+  const [investimento, setInvestimento] = useState("");
+  const [fluxos, setFluxos] = useState("");
   const [resultado, setResultado] = useState(null);
 
-  const calcularInvestimento = () => {
-    const capital = parseFloat(capitalInicial);
-    const juros = parseFloat(taxaJuros) / 100;
-    const periodo = parseFloat(anos);
-
-    const montante = capital * Math.pow(1 + juros, periodo);
-    setResultado(montante.toFixed(2));
+  const calcularInvestimento = async () => {
+    const init = parseFloat(investimento);
+    const fluxoArray = fluxos.split(",").map((val) => parseFloat(val.trim()));
+    try {
+      const response = await axios.post("http://127.0.0.1:5000/calcular", {
+        investimento: init,
+        fluxos: fluxoArray,
+      });
+      setResultado(response.data);
+    } catch (error) {
+      console.error("Erro ao calcular:", error);
+    }
   };
 
   return (
-    <div className="bg-gray-50 text-gray-800 font-sans min-h-screen">
-      <section className="py-16 px-6 bg-white">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-semibold text-indigo-800 mb-8">
-            Simulador de Investimento
-          </h2>
-          <div className="space-y-6">
-            <div>
-              <label
-                htmlFor="capital"
-                className="block text-lg text-gray-800 mb-2"
-              >
-                Capital Inicial (R$)
-              </label>
-              <input
-                type="number"
-                id="capital"
-                value={capitalInicial}
-                onChange={(e) => setCapitalInicial(e.target.value)}
-                className="w-full px-4 py-3 border rounded-lg"
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="taxa"
-                className="block text-lg text-gray-800 mb-2"
-              >
-                Taxa de Juros Anual (%)
-              </label>
-              <input
-                type="number"
-                id="taxa"
-                value={taxaJuros}
-                onChange={(e) => setTaxaJuros(e.target.value)}
-                className="w-full px-4 py-3 border rounded-lg"
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="anos"
-                className="block text-lg text-gray-800 mb-2"
-              >
-                Período (anos)
-              </label>
-              <input
-                type="number"
-                id="anos"
-                value={anos}
-                onChange={(e) => setAnos(e.target.value)}
-                className="w-full px-4 py-3 border rounded-lg"
-              />
-            </div>
-            <button
-              onClick={calcularInvestimento}
-              className="bg-indigo-600 text-white py-3 px-8 rounded-full text-lg hover:bg-indigo-500 transition-all duration-300"
-            >
-              Calcular
-            </button>
-            {resultado && (
-              <div className="mt-8">
-                <h3 className="text-2xl font-semibold text-indigo-800">
-                  Resultado
-                </h3>
-                <p className="text-lg text-gray-600">
-                  O valor acumulado após {anos} anos será de R$
-                  {resultado}.
-                </p>
-              </div>
-            )}
+    <div className="bg-gray-50 text-gray-800 font-sans min-h-screen p-6">
+      <section className="py-8 px-4 bg-white rounded shadow max-w-xl mx-auto">
+        <h2 className="text-3xl font-semibold text-indigo-800 mb-8">
+          Simulador de VPL e TIR
+        </h2>
+        <div className="space-y-6">
+          <div>
+            <label htmlFor="investimento" className="block text-lg mb-2">
+              Investimento Inicial (R$)
+            </label>
+            <input
+              type="number"
+              id="investimento"
+              value={investimento}
+              onChange={(e) => setInvestimento(e.target.value)}
+              className="w-full px-4 py-3 border rounded-lg"
+              placeholder="Ex: 1000"
+              required
+            />
           </div>
+          <div>
+            <label htmlFor="fluxos" className="block text-lg mb-2">
+              Fluxos de Caixa (separados por vírgula)
+            </label>
+            <input
+              type="text"
+              id="fluxos"
+              value={fluxos}
+              onChange={(e) => setFluxos(e.target.value)}
+              className="w-full px-4 py-3 border rounded-lg"
+              placeholder="Ex: 300, 400, 500, 600"
+              required
+            />
+          </div>
+          <button
+            onClick={calcularInvestimento}
+            className="bg-indigo-600 text-white py-3 px-8 rounded-full text-lg hover:bg-indigo-500 transition-all duration-300"
+          >
+            Calcular
+          </button>
+          {resultado && (
+            <div className="mt-8 p-4 border rounded-lg bg-gray-100">
+              <h3 className="text-2xl font-semibold text-indigo-800">
+                Resultado
+              </h3>
+              <p className="text-lg text-gray-600">VPL: R$ {resultado.vpl}</p>
+              <p className="text-lg text-gray-600">TIR: {resultado.tir}%</p>
+              {resultado.tma !== undefined && (
+                <p className="text-lg text-gray-600">
+                  TMA (Taxa Mínima de Atratividade): {resultado.tma}
+                  <br />
+                  <span className="text-sm text-gray-500">
+                    (Taxa SELIC: {resultado.taxa_selic} + IPCA:{" "}
+                    {resultado.taxa_ipca})
+                  </span>
+                </p>
+              )}
+            </div>
+          )}
         </div>
       </section>
     </div>

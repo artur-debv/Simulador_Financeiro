@@ -1,5 +1,5 @@
 import React from "react";
-import background from "../assets/background.jpg";
+import background_2 from "../assets/background_2.jpg";
 import RealTimeMarket from "../components/RealTimeMarket"; // Importando o componente
 
 function Home() {
@@ -8,7 +8,7 @@ function Home() {
       {/* Hero Section */}
       <section
         className="relative h-screen bg-cover bg-center flex items-center justify-center"
-        style={{ backgroundImage: `url(${background})` }}
+        style={{ backgroundImage: `url(${background_2})` }}
       >
         <div className="absolute inset-0 bg-black opacity-50"></div>
         <div className="text-center text-white z-10 px-6 py-8">
@@ -19,7 +19,7 @@ function Home() {
           </p>
           <a
             href="#indicadores"
-            className="inline-block bg-indigo-600 text-white py-3 px-8 rounded-full text-lg hover:bg-indigo-500 transition-all duration-300"
+            className="inline-block bg-green-600 text-white py-3 px-8 rounded-full text-lg hover:bg-indigo-500 transition-all duration-300"
           >
             Começar Agora
           </a>
