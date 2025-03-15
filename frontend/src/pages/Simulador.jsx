@@ -10,7 +10,7 @@ function Simulador() {
     const init = parseFloat(investimento);
     const fluxoArray = fluxos.split(",").map((val) => parseFloat(val.trim()));
     try {
-      const response = await axios.post("https://simulador-financeiro-6naq.onrender.com/calcula", {
+      const response = await axios.post("https://simulador-financeiro-6naq.onrender.com/calcular", {
         investimento: init,
         fluxos: fluxoArray,
       });
